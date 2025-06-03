@@ -22,7 +22,8 @@
         #content-area {
             transition: background-color 0.8s ease-in-out, transform 0.8s ease-in-out;
             transform-origin: center center;
-            min-height: calc(100vh - 80px - 128px); /* Adjust based on header and footer height */
+            /* Adjusted min-height to account for potentially taller header on mobile */
+            min-height: calc(100vh - 120px - 128px); /* Header height (approx 120px) + Footer height (128px) */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -102,7 +103,8 @@
     </header>
 
     <!-- Main Content Area -->
-    <main id="content-area" class="flex-grow p-4 md:p-8 relative overflow-hidden mt-20">
+    <!-- Adjusted mt-32 for mobile, mt-20 for medium and larger screens -->
+    <main id="content-area" class="flex-grow p-4 md:p-8 relative overflow-hidden mt-32 md:mt-20">
         <!-- Page content will be loaded here dynamically -->
     </main>
 
