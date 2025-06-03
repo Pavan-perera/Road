@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road A Institute - Math, Science & Music Tuition</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Base styles for all pages */
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.5s ease-in-out; /* Smooth transition for background on page load */
+            padding: 20px; /* Add some padding to body */
+        }
+        .page-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+            margin: 20px auto; /* Added margin for better spacing */
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* Smooth transition for page content */
+        }
+
+        /* Specific Page Backgrounds and Animations */
+        /* Note: Animations trigger on display:block, so it's a "page load" effect, not truly a transition between states on one page */
+        #home-page {
+            background: linear-gradient(to right top, #a8dadc, #457b9d, #1d3557); /* Blue-grey palette */
+            animation: fadeIn 1s ease-out;
+        }
+        #about-page {
+            background: linear-gradient(to right top, #f2e3d5, #f0b8a3, #e63946); /* Warm red/orange palette */
+            animation: slideInLeft 1s ease-out;
+        }
+        #courses-page {
+            background: linear-gradient(to right top, #c7ecee, #7ed6df, #22a6b3); /* Teal/aqua palette */
+            animation: slideInRight 1s ease-out;
+        }
+        #contact-page {
+            background: linear-gradient(to right top, #d0e0e0, #88b0b0, #36454F); /* Earthy, calm grey/green tones */
+            animation: fadeInScale 1s ease-out;
+        }
+        #enroll-page {
+            background: linear-gradient(to right top, #a2d2ff, #bbd0ff, #cddaff); /* Soft blues and purples */
+            animation: slideInUp 1s ease-out;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navigation Link Hover Effect */
+        .nav-link {
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            display: inline-block; /* Ensure padding/margin works vertically */
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: currentColor; /* Use current link color */
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-in-out;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Course Item Styling */
+        .course-item {
+            background-color: #ebf8ff; /* Light blue background */
+            border-left: 5px solid #22a6b3; /* Teal border */
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .course-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #4a4e69;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4c6ef5;
+            box-shadow: 0 0 0 3px rgba(76, 110, 245, 0.2);
+        }
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        .submit-button {
+            background-color: #4c6ef5;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .submit-button:hover {
+            background-color: #3b5bdb;
+            transform: translateY(-2px);
+        }
+        .pay-button {
+            background-color: #f7b731; /* Yellowish orange */
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .pay-button:hover {
+            background-color: #d19f2a;
+            transform: translateY(-2px);
+        }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            animation: zoomIn 0.3s ease-out;
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="website-content" class="p-4">
+        <div id="home" class="page-container" style="display: block;">
+            <h1 class="text-5xl font-extrabold text-blue-900 mb-6 animate-pulse">Unlock Your Potential!</h1>
+            <p class="text-xl text-gray-700 leading-relaxed mb-8">
+                Comprehensive tuition for **Mathematics, Science, and Music** for Grade 6 to O/L students.
+                Expert guidance at **"Road A" Institute**, coordinated by **Pavan Malindu Perera** and **Mrs. Himaya**.
+            </p>
+            <div class="space-x-6 mb-10">
+                <a href="#about" onclick="showPage('about')" class="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">About Us</a>
+                <a href="#courses" onclick="showPage('courses')" class="inline-block bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-green-700 transition duration-300 transform hover:scale-105">Our Courses</a>
+            </div>
+            <button onclick="showPaymentModal()" class="pay-button mt-4">Pay Class Fees Online</button>
+
+            <nav class="mt-8">
+                <ul class="flex flex-wrap justify-center space-x-6 text-xl font-semibold">
+                    <li><a href="#home" onclick="showPage('home')" class="nav-link text-blue-800 py-2">Home</a></li>
+                    <li><a href="#about" onclick="showPage('about')" class="nav-link text-blue-800 py-2">About</a></li>
+                    <li><a href="#courses" onclick="showPage('courses')" class="nav-link text-blue-800 py-2">Courses</a></li>
+                    <li><a href="#contact" onclick="showPage('contact')" class="nav-link text-blue-800 py-2">Contact</a></li>
+                    <li><a href="#enroll" onclick="showPage('enroll')" class="nav-link text-blue-800 py-2">Enroll Now</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id="about" class="page-container" style="display: none;">
+            <h1 class="text-4xl font-extrabold text-red-700 mb-6">About Our Institute</h1>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                Welcome to **"Road A" Institute**, where we are dedicated to fostering academic excellence and nurturing musical talent.
+                Our institute is passionately coordinated by myself, **Pavan Malindu Perera**, and **Mrs. Himaya**.
+            </p>
+            <div class="mb-6 text-left">
+                <h2 class="text-3xl font-bold text-red-600 mb-4">Meet the Educators:</h2>
+                <p class="text-lg text-gray-800 mb-3">
+                    <strong class="text-red-700">Pavan Malindu Perera:</strong> I am a qualified **Marine Engineer** with a deep understanding of logical and scientific principles, which I effectively translate into my teaching. Beyond engineering, I hold a **Music Visharad degree**, bringing a unique blend of analytical and creative expertise to our music classes. I am committed to making complex subjects understandable and enjoyable.
+                </p>
+                <p class="text-lg text-gray-800">
+                    <strong class="text-red-700">Mrs. Himaya:</strong> Mrs. Himaya is an equally dedicated educator, co-coordinating with me to ensure the smooth operation and high quality of our programs. Her commitment to student success is a cornerstone of our institute.
+                </p>
+            </div>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                We specialize in providing comprehensive tuition for <strong class="text-red-700">Mathematics, Science, and Music</strong> to students from <strong class="text-red-700">Grade 6 to 11 (O/L)</strong>. Our goal is to empower students with the knowledge and skills they need to excel in their examinations and beyond.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed mb-8">
+                At "Road A" Institute, we believe in a holistic approach to education, combining rigorous academic preparation with engaging and supportive learning environments.
+            </p>
+            <nav class="mt-8">
+                <ul class="flex flex-wrap justify-center space-x-6 text-xl font-semibold">
+                    <li><a href="#home" onclick="showPage('home')" class="nav-link text-red-800 py-2">Home</a></li>
+                    <li><a href="#about" onclick="showPage('about')" class="nav-link text-red-800 py-2">About</a></li>
+                    <li><a href="#courses" onclick="showPage('courses')" class="nav-link text-red-800 py-2">Courses</a></li>
+                    <li><a href="#contact" onclick="showPage('contact')" class="nav-link text-red-800 py-2">Contact</a></li>
+                    <li><a href="#enroll" onclick="showPage('enroll')" class="nav-link text-red-800 py-2">Enroll Now</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id="courses" class="page-container" style="display: none;">
+            <h1 class="text-4xl font-extrabold text-teal-700 mb-8">Our Comprehensive Courses</h1>
+            <p class="text-lg text-gray-700 leading-relaxed mb-8">
+                At "Road A" Institute, we offer a dynamic and thorough learning experience designed to ensure our students excel. Our curriculum for Mathematics, Science, and Music (Grade 6-11 O/L) is built around a multifaceted approach:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="course-item">
+                    <h3 class="text-2xl font-bold text-teal-600 mb-2">Past Paper Practice</h3>
+                    <p class="text-gray-700">Extensive practice with past examination papers to familiarize students with exam patterns, question types, and time management strategies.</p>
+                </div>
+                <div class="course-item">
+                    <h3 class="text-2xl font-bold text-teal-600 mb-2">Unit Paper Assessments</h3>
+                    <p class="text-gray-700">Regular unit-wise assessments to reinforce learning and identify areas that require additional attention after each topic is covered.</p>
+                </div>
+                <div class="course-item">
+                    <h3 class="text-2xl font-bold text-teal-600 mb-2">Speed Tests & Quizzes</h3>
+                    <p class="text-gray-700">Timed speed tests and quick quizzes to improve problem-solving speed, accuracy, and quick recall of fundamental concepts.</p>
+                </div>
+                <div class="course-item">
+                    <h3 class="text-2xl font-bold text-teal-600 mb-2">Practical Sessions</h3>
+                    <p class="text-gray-700">Hands-on practical sessions, especially for Science, to provide a deeper understanding of theoretical concepts through experimentation and observation.</p>
+                </div>
+                <div class="course-item">
+                    <h3 class="text-2xl font-bold text-teal-600 mb-2">In-depth Theories</h3>
+                    <p class="text-gray-700">Thorough explanations of core theories and principles, ensuring students grasp the foundational knowledge required for each subject.</p>
+                </div>
+                <div class="course-item">
+                    <h3 class="2xl font-bold text-teal-600 mb-2">Structured Lessons</h3>
+                    <p class="text-gray-700">Well-structured and engaging lessons that cover the entire syllabus, breaking down complex topics into digestible parts.</p>
+                </div>
+            </div>
+
+            <p class="text-lg text-gray-700 leading-relaxed mt-8">
+                Our aim is to provide a well-rounded education that prepares students not just for exams, but for a deeper understanding and appreciation of Mathematics, Science, and Music.
+            </p>
+            <nav class="mt-8">
+                <ul class="flex flex-wrap justify-center space-x-6 text-xl font-semibold">
+                    <li><a href="#home" onclick="showPage('home')" class="nav-link text-teal-800 py-2">Home</a></li>
+                    <li><a href="#about" onclick="showPage('about')" class="nav-link text-teal-800 py-2">About</a></li>
+                    <li><a href="#courses" onclick="showPage('courses')" class="nav-link text-teal-800 py-2">Courses</a></li>
+                    <li><a href="#contact" onclick="showPage('contact')" class="nav-link text-teal-800 py-2">Contact</a></li>
+                    <li><a href="#enroll" onclick="showPage('enroll')" class="nav-link text-teal-800 py-2">Enroll Now</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id="contact" class="page-container" style="display: none;">
+            <h1 class="text-4xl font-extrabold text-gray-800 mb-8">Get in Touch!</h1>
+            <p class="text-lg text-gray-700 leading-relaxed mb-8">
+                We'd love to hear from you. Feel free to reach out to us through any of the following channels:
+            </p>
+
+            <div class="contact-info flex flex-col items-center">
+                <div class="flex items-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8.016 13.91l-1.39-1.39a.5.5 0 010-.707l.707-.707a.5.5 0 01.707 0l.98.98 2.536-2.536a.5.5 0 01.707 0l.707.707a.5.5 0 010 .707l-3.243 3.243a.5.5 0 01-.707 0z" clip-rule="evenodd" />
+                        <path d="M11 6a.5.5 0 01.5.5v2a.5.5 0 01-1 0V6.5a.5.5 0 01.5-.5z" />
+                    </svg>
+                    <p class="text-xl text-gray-800">
+                        <strong>WhatsApp:</strong> <a href="https://wa.me/94710325294" target="_blank" class="text-blue-600 hover:underline">+94710325294</a>
+                    </p>
+                </div>
+                <div class="flex items-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0018 4H2a2 2 0 00-.003 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h14a2 2 0 002-2V8.118z" />
+                    </svg>
+                    <p class="text-xl text-gray-800">
+                        <strong>Email:</strong> <a href="mailto:pavanmalinduperera@gmail.com" class="text-blue-600 hover:underline">pavanmalinduperera@gmail.com</a>
+                    </p>
+                </div>
+                <div class="flex items-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-700" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-3.5-7.5a.5.5 0 011 0V11a.5.5 0 01-1 0V10.5zM11 11a.5.5 0 011 0v.5a.5.5 0 01-1 0v-.5zm-1-3a.5.5 0 00-.5.5v3a.5.5 0 001 0v-3A.5.5 0 0010 8z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM9.5 9.5a.5.5 0 00-1 0V10a.5.5 0 001 0V9.5zm2 0a.5.5 0 00-1 0V10a.5.5 0 001 0V9.5zM10 12a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                    </svg>
+                    <p class="text-xl text-gray-800">
+                        <strong>Facebook:</strong> <a href="https://www.facebook.com/share/1DjKgbYyMp/" target="_blank" class="text-blue-600 hover:underline">Connect on Facebook</a>
+                    </p>
+                </div>
+            </div>
+            <p class="text-lg text-gray-700 leading-relaxed mt-6">
+                We look forward to helping you or your child achieve academic and musical success!
+            </p>
+            <nav class="mt-8">
+                <ul class="flex flex-wrap justify-center space-x-6 text-xl font-semibold">
+                    <li><a href="#home" onclick="showPage('home')" class="nav-link text-gray-800 py-2">Home</a></li>
+                    <li><a href="#about" onclick="showPage('about')" class="nav-link text-gray-800 py-2">About</a></li>
+                    <li><a href="#courses" onclick="showPage('courses')" class="nav-link text-gray-800 py-2">Courses</a></li>
+                    <li><a href="#contact" onclick="showPage('contact')" class="nav-link text-gray-800 py-2">Contact</a></li>
+                    <li><a href="#enroll" onclick="showPage('enroll')" class="nav-link text-gray-800 py-2">Enroll Now</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id="enroll" class="page-container" style="display: none;">
+            <h1 class="text-4xl font-extrabold text-indigo-700 mb-8">Student Enrollment Form</h1>
+            <p class="text-lg text-gray-700 leading-relaxed mb-8">
+                Please fill out the form below to enroll for our tuition classes. Your details will be sent directly to our WhatsApp.
+            </p>
+
+            <form id="enrollmentForm" onsubmit="sendToWhatsApp(event)" class="text-left">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group">
+                        <label for="studentName">Student Full Name:</label>
+                        <input type="text" id="studentName" name="studentName" placeholder="E.g., John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentAge">Student Age:</label>
+                        <input type="number" id="studentAge" name="studentAge" min="10" max="18" placeholder="E.g., 14" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group">
+                        <label for="studentGrade">Student Grade (6-11 O/L):</label>
+                        <select id="studentGrade" name="studentGrade" required>
+                            <option value="">Select Grade</option>
+                            <option value="6">Grade 6</option>
+                            <option value="7">Grade 7</option>
+                            <option value="8">Grade 8</option>
+                            <option value="9">Grade 9</option>
+                            <option value="10">Grade 10</option>
+                            <option value="11">Grade 11 (O/L)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject(s) Willing to Join:</label>
+                        <div class="flex flex-wrap gap-x-6">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="subjects" value="Mathematics" class="form-checkbox text-indigo-600">
+                                <span class="ml-2 text-gray-700">Mathematics</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="subjects" value="Science" class="form-checkbox text-indigo-600">
+                                <span class="ml-2 text-gray-700">Science</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="subjects" value="Music" class="form-checkbox text-indigo-600">
+                                <span class="ml-2 text-gray-700">Music</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="parentName">Parent/Guardian Full Name:</label>
+                    <input type="text" id="parentName" name="parentName" placeholder="E.g., Jane Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="homeAddress">Home Address:</label>
+                    <textarea id="homeAddress" name="homeAddress" rows="3" placeholder="Street Address, City, Postal Code" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="parentContact">Parent/Guardian Contact Number:</label>
+                    <input type="tel" id="parentContact" name="parentContact" placeholder="E.g., +9471XXXXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label for="parentEmail">Parent/Guardian Email (Optional):</label>
+                    <input type="email" id="parentEmail" name="parentEmail" placeholder="E.g., janedoe@example.com">
+                </div>
+
+                <div class="text-center mt-8">
+                    <button type="submit" class="submit-button">Send Enrollment via WhatsApp</button>
+                </div>
+            </form>
+
+            <nav class="mt-8">
+                <ul class="flex flex-wrap justify-center space-x-6 text-xl font-semibold">
+                    <li><a href="#home" onclick="showPage('home')" class="nav-link text-indigo-800 py-2">Home</a></li>
+                    <li><a href="#about" onclick="showPage('about')" class="nav-link text-indigo-800 py-2">About</a></li>
+                    <li><a href="#courses" onclick="showPage('courses')" class="nav-link text-indigo-800 py-2">Courses</a></li>
+                    <li><a href="#contact" onclick="showPage('contact')" class="nav-link text-indigo-800 py-2">Contact</a></li>
+                    <li><a href="#enroll" onclick="showPage('enroll')" class="nav-link text-indigo-800 py-2">Enroll Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closePaymentModal()">&times;</span>
+            <h2 class="text-3xl font-bold text-blue-700 mb-4">Online Payment Information</h2>
+            <p class="text-lg text-gray-700 mb-6">
+                Online card payment facilities are currently under development and will be available soon!
+                <br><br>
+                For now, please contact us directly to arrange your class fee payments. You can reach us via:
+            </p>
+            <p class="text-xl text-gray-800 mb-2">
+                <strong class="text-blue-600">WhatsApp:</strong> <a href="https://wa.me/94710325294" target="_blank" class="text-blue-600 hover:underline">+94710325294</a>
+            </p>
+            <p class="text-xl text-gray-800">
+                <strong class="text-blue-600">Email:</strong> <a href="mailto:pavanmalinduperera@gmail.com" class="text-blue-600 hover:underline">pavanmalinduperera@gmail.com</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle page visibility and background changes
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-container');
+            pages.forEach(page => {
+                page.style.display = 'none';
+            });
+
+            // Show the selected page
+            const selectedPage = document.getElementById(pageId);
+            selectedPage.style.display = 'block';
+
+            // Apply animation class to the page container
+            selectedPage.style.animation = ''; // Reset animation
+            void selectedPage.offsetWidth; // Trigger reflow to restart animation
+            selectedPage.style.animation = getPageAnimation(pageId);
+
+            // Change body background based on the page
+            const body = document.body;
+            body.id = `${pageId}-page`; // Set ID on body for background styling
+            window.location.hash = pageId; // Update URL hash for direct linking/refresh
+        }
+
+        function getPageAnimation(pageId) {
+            switch (pageId) {
+                case 'home': return 'fadeIn 1s ease-out';
+                case 'about': return 'slideInLeft 1s ease-out';
+                case 'courses': return 'slideInRight 1s ease-out';
+                case 'contact': return 'fadeInScale 1s ease-out';
+                case 'enroll': return 'slideInUp 1s ease-out';
+                default: return 'none';
+            }
+        }
+
+        // Initialize with the home page shown and its background
+        document.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash)) {
+                showPage(hash);
+            } else {
+                showPage('home');
+            }
+        });
+
+        // --- Payment Modal Functions ---
+        function showPaymentModal() {
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        // Close modal if clicked outside content
+        window.onclick = function(event) {
+            const modal = document.getElementById('paymentModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // --- WhatsApp Enrollment Form Submission ---
+        function sendToWhatsApp(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const form = document.getElementById('enrollmentForm');
+            const studentName = form.studentName.value;
+            const studentAge = form.studentAge.value;
+            const studentGrade = form.studentGrade.value;
+            const parentName = form.parentName.value;
+            const homeAddress = form.homeAddress.value;
+            const parentContact = form.parentContact.value;
+            const parentEmail = form.parentEmail.value;
+
+            // Get selected subjects
+            const selectedSubjects = Array.from(form.elements.subjects)
+                                        .filter(checkbox => checkbox.checked)
+                                        .map(checkbox => checkbox.value)
+                                        .join(', ') || 'Not specified';
+
+            // Construct the WhatsApp message
+            let message = `*Road A Institute - New Student Enrollment*
+
+`;
+            message += `*Student Details:*
+`;
+            message += `Name: ${studentName}
+`;
+            message += `Age: ${studentAge}
+`;
+            message += `Grade: ${studentGrade}
+`;
+            message += `Subjects Interested: ${selectedSubjects}
+
+`;
+            message += `*Parent/Guardian Details:*
+`;
+            message += `Name: ${parentName}
+`;
+            message += `Contact No: ${parentContact}
+`;
+            message += `Email: ${parentEmail || 'N/A'}
+`;
+            message += `Home Address: ${homeAddress}
+
+`;
+            message += `_This enrollment request was sent from the website._`;
+
+            // Encode the message for URL
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappNumber = '+94710325294'; // Your WhatsApp number
+
+            // Open WhatsApp with the pre-filled message
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank');
+
+            // Optionally, show a confirmation message
+            alert('Your enrollment details have been prepared for WhatsApp. Please click "Send" in WhatsApp to complete the submission!');
+
+            // Optional: Clear the form after submission attempt
+            form.reset();
+        }
+    </script>
+</body>
+</html>
