@@ -163,6 +163,11 @@
     </button>
 
     <script>
+        // IMPORTANT: Replace "YOUR_GEMINI_API_KEY_HERE" with your actual Gemini API key.
+        // You can get one from Google AI Studio: https://aistudio.google.com/app/apikey
+        // Be aware that embedding API keys directly in client-side code makes them publicly visible.
+        const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"; 
+
         // Store the current page and its background class
         let currentPage = 'home';
         let currentBgClass = 'bg-home';
@@ -472,7 +477,11 @@
                 if (pageName === 'enroll') {
                     document.getElementById('enrollment-form').addEventListener('submit', handleEnrollmentSubmit);
                     populateAgeAndGradeOptions(); // Populate dropdowns
-                    handleSubjectChange(); // Initial call to set required status
+                    // Attach change listeners to subject checkboxes for dynamic validation
+                    document.querySelectorAll('input[name="subjects"]').forEach(checkbox => {
+                        checkbox.addEventListener('change', handleSubjectChange);
+                    });
+                    handleSubjectChange(); // Initial call to set required status based on default
                 } else if (pageName === 'payment') {
                     document.getElementById('payment-form').addEventListener('submit', handlePaymentSubmit);
                     // Re-attach listener for WhatsApp receipt button as it's dynamically added
@@ -724,8 +733,7 @@ ${classContext}
 User's question: ${userMessage}` }] });
 
             const payload = { contents: chatHistory };
-            const apiKey = ""; // Canvas will automatically provide this at runtime
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -776,8 +784,7 @@ User's question: ${userMessage}` }] });
 
             let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
             const payload = { contents: chatHistory };
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -813,8 +820,7 @@ User's question: ${userMessage}` }] });
 
             let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
             const payload = { contents: chatHistory };
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
             try {
                 const response = await fetch(apiUrl, {
