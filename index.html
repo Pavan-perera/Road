@@ -169,7 +169,8 @@
         // IMPORTANT: Replace "YOUR_GEMINI_API_KEY_HERE" with your actual Gemini API key.
         // You can get one from Google AI Studio: https://aistudio.google.com/app/apikey
         // Be aware that embedding API keys directly in client-side code makes them publicly visible.
-        const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"; 
+        const GEMINI_API_KEY = "AIzaSyDsQYMMIAbqkOJ73OAC5nsDBTWSdRk-uj4"; 
+        console.log("Current Gemini API Key value:", GEMINI_API_KEY); // Log API key status for debugging
 
         // Store the current page and its background class
         let currentPage = 'home';
@@ -325,6 +326,47 @@
                                         <div id="loading-music" class="text-center text-sm text-gray-500 mt-2 hidden">
                                             <i class="fas fa-spinner fa-spin mr-2"></i> Generating...
                                         </div>
+                                    </div>
+                                </div>
+
+                                <!-- New: Practice Question Generator -->
+                                <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 mt-12 w-full max-w-2xl mx-auto">
+                                    <h3 class="text-4xl font-bold text-center text-blue-700 mb-8">Practice Question Generator ✨</h3>
+                                    <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 mb-6">
+                                        <select id="practice-subject" class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full md:w-1/2">
+                                            <option value="">Select Subject</option>
+                                            <option value="Mathematics">Mathematics</option>
+                                            <option value="Science">Science</option>
+                                        </select>
+                                        <select id="practice-grade" class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full md:w-1/2">
+                                            <option value="">Select Grade</option>
+                                            <option value="6">Grade 6</option>
+                                            <option value="7">Grade 7</option>
+                                            <option value="8">Grade 8</option>
+                                            <option value="9">Grade 9</option>
+                                            <option value="10">Grade 10</option>
+                                            <option value="11">Grade 11</option>
+                                        </select>
+                                    </div>
+                                    <button class="bg-indigo-600 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 w-full" onclick="generatePracticeQuestion()">
+                                        Generate Question
+                                    </button>
+                                    <div id="practice-question-display" class="mt-6 text-lg text-gray-700 italic"></div>
+                                    <div id="practice-question-loading" class="text-center text-sm text-gray-500 mt-2 hidden">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i> Generating...
+                                    </div>
+                                </div>
+
+                                <!-- New: Music Theory Explainer -->
+                                <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 mt-12 w-full max-w-2xl mx-auto">
+                                    <h3 class="text-4xl font-bold text-center text-blue-700 mb-8">Music Theory Explainer ✨</h3>
+                                    <input type="text" id="music-theory-topic" placeholder="e.g., Major Scales, Chords, Rhythm" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 mb-6">
+                                    <button class="bg-teal-600 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg hover:bg-teal-700 transition-all duration-300 transform hover:scale-105 w-full" onclick="explainMusicTheory()">
+                                        Explain Topic
+                                    </button>
+                                    <div id="music-theory-explanation" class="mt-6 text-lg text-gray-700 leading-relaxed"></div>
+                                    <div id="music-theory-loading" class="text-center text-sm text-gray-500 mt-2 hidden">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i> Generating...
                                     </div>
                                 </div>
                             </div>
@@ -648,8 +690,8 @@
             data.subjects = selectedSubjects.join(', ') || 'No subjects selected'; // Handle case where none are selected
 
             const age = parseInt(data.studentAge);
-            const grade = parseInt(data.studentGrade);
-
+            const grade = parseInt(data.studentGrade); 
+            
             // Check if Mathematics or Science is selected for validation
             const isMathScienceSelected = selectedSubjects.includes('Mathematics') || selectedSubjects.includes('Science');
 
@@ -792,6 +834,12 @@ Road A Institute
             const userMessage = chatbotInput.value.trim();
             if (!userMessage) return;
 
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
+                appendMessage("Sorry, the AI chatbot is not configured. Please ensure your Gemini API key is correctly set in the code.", 'ai');
+                console.error("Gemini API Key is not set. Please replace 'YOUR_GEMINI_API_KEY_HERE' with your actual API key.");
+                return;
+            }
+
             // Display user message
             appendMessage(userMessage, 'user');
             chatbotInput.value = '';
@@ -860,6 +908,13 @@ User's question: ${userMessage}` }] });
             displayDiv.innerHTML = ''; // Clear previous content
             loadingDiv.classList.remove('hidden'); // Show loading
 
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
+                displayDiv.innerHTML = "AI features are not configured. Please set your Gemini API key.";
+                console.error("Gemini API Key is not set. Please replace 'YOUR_GEMINI_API_KEY_HERE' with your actual API key.");
+                loadingDiv.classList.add('hidden');
+                return;
+            }
+
             const prompt = `Generate a concise, engaging paragraph (max 80 words) about what makes the ${subject} tuition class at Road A Institute unique and beneficial for Grade 6-11 O/L students. Focus on specific aspects like problem-solving, practicals, or theoretical depth.`;
 
             let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
@@ -896,6 +951,13 @@ User's question: ${userMessage}` }] });
             displayDiv.innerHTML = ''; // Clear previous content
             loadingDiv.classList.remove('hidden'); // Show loading
 
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
+                displayDiv.innerHTML = "AI features are not configured. Please set your Gemini API key.";
+                console.error("Gemini API Key is not set. Please replace 'YOUR_GEMINI_API_KEY_HERE' with your actual API key.");
+                loadingDiv.classList.add('hidden');
+                return;
+            }
+
             const prompt = `Generate a short, actionable study tip (max 50 words) for a Grade 6-11 O/L student in Sri Lanka, focusing on general study habits, time management, or exam preparation. Make it encouraging.`;
 
             let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
@@ -920,6 +982,109 @@ User's question: ${userMessage}` }] });
                 }
             } catch (error) {
                 console.error("Error generating study tip:", error);
+                displayDiv.innerHTML = "Error connecting to AI. Please try again.";
+            } finally {
+                loadingDiv.classList.add('hidden'); // Hide loading
+            }
+        }
+
+        // New: Function to generate practice question
+        async function generatePracticeQuestion() {
+            const subject = document.getElementById('practice-subject').value;
+            const grade = document.getElementById('practice-grade').value;
+            const displayDiv = document.getElementById('practice-question-display');
+            const loadingDiv = document.getElementById('practice-question-loading');
+            displayDiv.innerHTML = ''; // Clear previous content
+            loadingDiv.classList.remove('hidden'); // Show loading
+
+            if (!subject || !grade) {
+                displayDiv.innerHTML = "Please select both a subject and a grade.";
+                loadingDiv.classList.add('hidden');
+                return;
+            }
+
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
+                displayDiv.innerHTML = "AI features are not configured. Please set your Gemini API key.";
+                console.error("Gemini API Key is not set. Please replace 'YOUR_GEMINI_API_KEY_HERE' with your actual API key.");
+                loadingDiv.classList.add('hidden');
+                return;
+            }
+
+            const prompt = `Generate a simple, single-line practice question for a Grade ${grade} student in ${subject}. The question should be concise and directly test a basic concept. Do not include the answer.`;
+
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { contents: chatHistory };
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    displayDiv.innerHTML = result.candidates[0].content.parts[0].text;
+                } else {
+                    displayDiv.innerHTML = "Failed to generate question. Please try again.";
+                    console.error("AI response structure unexpected:", result);
+                }
+            } catch (error) {
+                console.error(`Error generating practice question for ${subject}, Grade ${grade}:`, error);
+                displayDiv.innerHTML = "Error connecting to AI. Please try again.";
+            } finally {
+                loadingDiv.classList.add('hidden'); // Hide loading
+            }
+        }
+
+        // New: Function to explain music theory
+        async function explainMusicTheory() {
+            const topic = document.getElementById('music-theory-topic').value.trim();
+            const displayDiv = document.getElementById('music-theory-explanation');
+            const loadingDiv = document.getElementById('music-theory-loading');
+            displayDiv.innerHTML = ''; // Clear previous content
+            loadingDiv.classList.remove('hidden'); // Show loading
+
+            if (!topic) {
+                displayDiv.innerHTML = "Please enter a music theory topic.";
+                loadingDiv.classList.add('hidden');
+                return;
+            }
+
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
+                displayDiv.innerHTML = "AI features are not configured. Please set your Gemini API key.";
+                console.error("Gemini API Key is not set. Please replace 'YOUR_GEMINI_API_KEY_HERE' with your actual API key.");
+                loadingDiv.classList.add('hidden');
+                return;
+            }
+
+            const prompt = `Explain the music theory concept "${topic}" in simple terms, suitable for a beginner. Keep the explanation under 100 words.`;
+
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { contents: chatHistory };
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    displayDiv.innerHTML = result.candidates[0].content.parts[0].text;
+                } else {
+                    displayDiv.innerHTML = "Failed to explain topic. Please try again.";
+                    console.error("AI response structure unexpected:", result);
+                }
+            } catch (error) {
+                console.error(`Error explaining music theory topic "${topic}":`, error);
                 displayDiv.innerHTML = "Error connecting to AI. Please try again.";
             } finally {
                 loadingDiv.classList.add('hidden'); // Hide loading
