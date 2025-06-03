@@ -3,607 +3,856 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Road A Institute - Math, Science & Music Tuition</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Road A Institute - Mathematics, Science & Music Tuition</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Base styles for all pages */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); /* Light gradient background */
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Custom styles for smooth page transitions */
+        #content-area {
+            transition: background-color 0.8s ease-in-out, transform 0.8s ease-in-out;
+            transform-origin: center center;
+            min-height: calc(100vh - 80px - 128px); /* Adjust based on header and footer height */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: background 0.5s ease-in-out; /* Smooth transition for background on page load */
-            padding: 20px; /* Add some padding to body */
+            padding: 2rem;
         }
-        .page-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            padding: 40px;
-            text-align: center;
-            max-width: 900px;
-            width: 100%;
-            margin: 20px auto; /* Added margin for better spacing */
-            transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* Smooth transition for page content */
+        .page-enter-active {
+            animation: fadeInScale 0.8s ease-out;
         }
-
-        /* Specific Page Backgrounds and Animations */
-        /* Note: Animations trigger on display:block, so it's a "page load" effect, not truly a transition between states on one page */
-        #home-page {
-            background: linear-gradient(to right top, #a8dadc, #457b9d, #1d3557); /* Blue-grey palette */
-            animation: fadeIn 1s ease-out;
-        }
-        #about-page {
-            background: linear-gradient(to right top, #f2e3d5, #f0b8a3, #e63946); /* Warm red/orange palette */
-            animation: slideInLeft 1s ease-out;
-        }
-        #courses-page {
-            background: linear-gradient(to right top, #c7ecee, #7ed6df, #22a6b3); /* Teal/aqua palette */
-            animation: slideInRight 1s ease-out;
-        }
-        #contact-page {
-            background: linear-gradient(to right top, #d0e0e0, #88b0b0, #36454F); /* Earthy, calm grey/green tones */
-            animation: fadeInScale 1s ease-out;
-        }
-        #enroll-page {
-            background: linear-gradient(to right top, #a2d2ff, #bbd0ff, #cddaff); /* Soft blues and purples */
-            animation: slideInUp 1s ease-out;
-        }
-
-        /* Keyframe Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
+        .page-exit-active {
+            animation: fadeOutScale 0.8s ease-in;
         }
         @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9); }
+            from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeOutScale {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
         }
 
-        /* Navigation Link Hover Effect */
-        .nav-link {
-            transition: all 0.3s ease-in-out;
-            position: relative;
-            overflow: hidden;
-            display: inline-block; /* Ensure padding/margin works vertically */
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: currentColor; /* Use current link color */
-            transform: scaleX(0);
-            transform-origin: bottom right;
-            transition: transform 0.3s ease-in-out;
-        }
-        .nav-link:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
+        /* Specific background colors for pages */
+        .bg-home { background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%); } /* Greenish */
+        .bg-about { background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%); } /* Bluish */
+        .bg-courses { background: linear-gradient(135deg, #fbcfe8 0%, #f472b6 100%); } /* Pinkish */
+        .bg-contact { background: linear-gradient(135deg, #fed7aa 0%, #fbbf24 100%); } /* Orangish */
+        .bg-enroll { background: linear-gradient(135deg, #d8b4fe 0%, #a78bfa 100%); } /* Purplish */
+        .bg-payment { background: linear-gradient(135deg, #fecaca 0%, #ef4444 100%); } /* Reddish */
+        .bg-chatbot { background: linear-gradient(135deg, #a5f3fc 0%, #22d3ee 100%); } /* Cyan */
+
+        /* Navigation link active state */
+        .nav-link.active {
+            color: #1d4ed8; /* Darker blue for active link */
+            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 9999px; /* Fully rounded */
         }
         .nav-link:hover {
-            opacity: 0.8;
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Course Item Styling */
-        .course-item {
-            background-color: #ebf8ff; /* Light blue background */
-            border-left: 5px solid #22a6b3; /* Teal border */
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: left;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        /* Custom scrollbar for chatbot */
+        .chatbot-messages::-webkit-scrollbar {
+            width: 8px;
         }
-        .course-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Form Styling */
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #4a4e69;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease;
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #4c6ef5;
-            box-shadow: 0 0 0 3px rgba(76, 110, 245, 0.2);
-        }
-        .form-group input[type="checkbox"] {
-            width: auto;
-            margin-right: 10px;
-        }
-        .submit-button {
-            background-color: #4c6ef5;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.25rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        .submit-button:hover {
-            background-color: #3b5bdb;
-            transform: translateY(-2px);
-        }
-        .pay-button {
-            background-color: #f7b731; /* Yellowish orange */
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        .pay-button:hover {
-            background-color: #d19f2a;
-            transform: translateY(-2px);
-        }
-        /* Modal styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 30px;
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            max-width: 500px;
-            text-align: center;
-            position: relative;
-            animation: zoomIn 0.3s ease-out;
         }
-        @keyframes zoomIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
         }
-        .close-button {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            cursor: pointer;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+        .chatbot-messages::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
     </style>
 </head>
-<body>
-    <div id="website-content" class="p-4">
-        <div id="home" class="page-container" style="display: block;">
-            <h1 class="text-5xl font-extrabold text-blue-900 mb-6 animate-pulse">Unlock Your Potential!</h1>
-            <p class="text-xl text-gray-700 leading-relaxed mb-8">
-                Comprehensive tuition for **Mathematics, Science, and Music** for Grade 6 to O/L students.
-                Expert guidance at **"Road A" Institute**, coordinated by **Pavan Malindu Perera** and **Mrs. Himaya**.
-            </p>
-            <div class="space-x-6 mb-10">
-                <a href="#about" onclick="showPage('about')" class="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">About Us</a>
-                <a href="#courses" onclick="showPage('courses')" class="inline-block bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-green-700 transition duration-300 transform hover:scale-105">Our Courses</a>
-            </div>
-            <button onclick="showPaymentModal()" class="pay-button mt-4">Pay Class Fees Online</button>
+<body class="font-inter bg-gray-100 min-h-screen flex flex-col">
 
-            <nav class="mt-8">
-                <ul class="flex flex-wrap justify-center space-x-6 text-xl font-semibold">
-                    <li><a href="#home" onclick="showPage('home')" class="nav-link text-blue-800 py-2">Home</a></li>
-                    <li><a href="#about" onclick="showPage('about')" class="nav-link text-blue-800 py-2">About</a></li>
-                    <li><a href="#courses" onclick="showPage('courses')" class="nav-link text-blue-800 py-2">Courses</a></li>
-                    <li><a href="#contact" onclick="showPage('contact')" class="nav-link text-blue-800 py-2">Contact</a></li>
-                    <li><a href="#enroll" onclick="showPage('enroll')" class="nav-link text-blue-800 py-2">Enroll Now</a></li>
+    <!-- Header and Navigation -->
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg py-4 px-6 fixed w-full top-0 z-40">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-3xl font-bold mb-2 md:mb-0">Road A Institute</h1>
+            <nav>
+                <ul class="flex space-x-4 md:space-x-8 text-lg">
+                    <li><a href="#" class="nav-link px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300" data-page="about">About</a></li>
+                    <li><a href="#" class="nav-link px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300" data-page="courses">Courses</a></li>
+                    <li><a href="#" class="nav-link px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300" data-page="contact">Contact</a></li>
+                    <li><a href="#" class="nav-link px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300" data-page="enroll">Enroll Now</a></li>
+                    <li><a href="#" class="nav-link px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300" data-page="payment">Payments</a></li>
                 </ul>
             </nav>
         </div>
+    </header>
 
-        <div id="about" class="page-container" style="display: none;">
-            <h1 class="text-4xl font-extrabold text-red-700 mb-6">About Our Institute</h1>
-            <p class="text-lg text-gray-700 leading-relaxed mb-6">
-                Welcome to **"Road A" Institute**, where we are dedicated to fostering academic excellence and nurturing musical talent.
-                Our institute is passionately coordinated by myself, **Pavan Malindu Perera**, and **Mrs. Himaya**.
-            </p>
-            <div class="mb-6 text-left">
-                <h2 class="text-3xl font-bold text-red-600 mb-4">Meet the Educators:</h2>
-                <p class="text-lg text-gray-800 mb-3">
-                    <strong class="text-red-700">Pavan Malindu Perera:</strong> I am a qualified **Marine Engineer** with a deep understanding of logical and scientific principles, which I effectively translate into my teaching. Beyond engineering, I hold a **Music Visharad degree**, bringing a unique blend of analytical and creative expertise to our music classes. I am committed to making complex subjects understandable and enjoyable.
-                </p>
-                <p class="text-lg text-gray-800">
-                    <strong class="text-red-700">Mrs. Himaya:</strong> Mrs. Himaya is an equally dedicated educator, co-coordinating with me to ensure the smooth operation and high quality of our programs. Her commitment to student success is a cornerstone of our institute.
-                </p>
+    <!-- Main Content Area -->
+    <main id="content-area" class="flex-grow p-4 md:p-8 relative overflow-hidden mt-20">
+        <!-- Page content will be loaded here dynamically -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-blue-700 to-purple-800 text-white py-8 mt-auto shadow-inner">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <div class="mb-4 md:mb-0 pl-4">
+                <h3 class="text-2xl font-bold mb-2">Road A Institute</h3>
+                <p class="text-sm">&copy; 2024 All rights reserved.</p>
             </div>
-            <p class="text-lg text-gray-700 leading-relaxed mb-6">
-                We specialize in providing comprehensive tuition for <strong class="text-red-700">Mathematics, Science, and Music</strong> to students from <strong class="text-red-700">Grade 6 to 11 (O/L)</strong>. Our goal is to empower students with the knowledge and skills they need to excel in their examinations and beyond.
-            </p>
-            <p class="text-lg text-gray-700 leading-relaxed mb-8">
-                At "Road A" Institute, we believe in a holistic approach to education, combining rigorous academic preparation with engaging and supportive learning environments.
-            </p>
-            <nav class="mt-8">
-                <ul class="flex flex-wrap justify-center space-x-6 text-xl font-semibold">
-                    <li><a href="#home" onclick="showPage('home')" class="nav-link text-red-800 py-2">Home</a></li>
-                    <li><a href="#about" onclick="showPage('about')" class="nav-link text-red-800 py-2">About</a></li>
-                    <li><a href="#courses" onclick="showPage('courses')" class="nav-link text-red-800 py-2">Courses</a></li>
-                    <li><a href="#contact" onclick="showPage('contact')" class="nav-link text-red-800 py-2">Contact</a></li>
-                    <li><a href="#enroll" onclick="showPage('enroll')" class="nav-link text-red-800 py-2">Enroll Now</a></li>
-                </ul>
-            </nav>
+            <div class="flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-8 text-lg pr-4">
+                <a href="https://wa.me/94710325294" target="_blank" class="flex items-center hover:text-blue-200 transition-colors duration-300">
+                    <i class="fab fa-whatsapp text-2xl mr-2"></i> +94 71 032 5294
+                </a>
+                <a href="mailto:pavanmalinduperera@gmail.com" class="flex items-center hover:text-blue-200 transition-colors duration-300">
+                    <i class="fas fa-envelope text-2xl mr-2"></i> pavanmalinduperera@gmail.com
+                </a>
+                <a href="https://www.facebook.com/share/1DjKgbYyMp/" target="_blank" class="flex items-center hover:text-blue-200 transition-colors duration-300">
+                    <i class="fab fa-facebook-square text-2xl mr-2"></i> Facebook
+                </a>
+            </div>
         </div>
+    </footer>
 
-        <div id="courses" class="page-container" style="display: none;">
-            <h1 class="text-4xl font-extrabold text-teal-700 mb-8">Our Comprehensive Courses</h1>
-            <p class="text-lg text-gray-700 leading-relaxed mb-8">
-                At "Road A" Institute, we offer a dynamic and thorough learning experience designed to ensure our students excel. Our curriculum for Mathematics, Science, and Music (Grade 6-11 O/L) is built around a multifaceted approach:
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="course-item">
-                    <h3 class="text-2xl font-bold text-teal-600 mb-2">Past Paper Practice</h3>
-                    <p class="text-gray-700">Extensive practice with past examination papers to familiarize students with exam patterns, question types, and time management strategies.</p>
-                </div>
-                <div class="course-item">
-                    <h3 class="text-2xl font-bold text-teal-600 mb-2">Unit Paper Assessments</h3>
-                    <p class="text-gray-700">Regular unit-wise assessments to reinforce learning and identify areas that require additional attention after each topic is covered.</p>
-                </div>
-                <div class="course-item">
-                    <h3 class="text-2xl font-bold text-teal-600 mb-2">Speed Tests & Quizzes</h3>
-                    <p class="text-gray-700">Timed speed tests and quick quizzes to improve problem-solving speed, accuracy, and quick recall of fundamental concepts.</p>
-                </div>
-                <div class="course-item">
-                    <h3 class="text-2xl font-bold text-teal-600 mb-2">Practical Sessions</h3>
-                    <p class="text-gray-700">Hands-on practical sessions, especially for Science, to provide a deeper understanding of theoretical concepts through experimentation and observation.</p>
-                </div>
-                <div class="course-item">
-                    <h3 class="text-2xl font-bold text-teal-600 mb-2">In-depth Theories</h3>
-                    <p class="text-gray-700">Thorough explanations of core theories and principles, ensuring students grasp the foundational knowledge required for each subject.</p>
-                </div>
-                <div class="course-item">
-                    <h3 class="2xl font-bold text-teal-600 mb-2">Structured Lessons</h3>
-                    <p class="text-gray-700">Well-structured and engaging lessons that cover the entire syllabus, breaking down complex topics into digestible parts.</p>
+    <!-- AI Chatbot Modal -->
+    <div id="chatbot-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col h-5/6 md:h-3/4">
+            <div class="flex justify-between items-center bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-t-xl">
+                <h2 class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-robot mr-2"></i> AI Assistant
+                </h2>
+                <button id="close-chatbot" class="text-white hover:text-gray-200 text-2xl">&times;</button>
+            </div>
+            <div id="chatbot-messages" class="flex-grow p-4 overflow-y-auto bg-gray-50 chatbot-messages">
+                <!-- Chat messages will appear here -->
+                <div class="flex justify-start mb-2">
+                    <div class="bg-blue-100 text-blue-800 p-3 rounded-lg max-w-[80%] shadow">
+                        Hello! I'm your AI assistant. Ask me anything about Road A Institute classes!
+                    </div>
                 </div>
             </div>
-
-            <p class="text-lg text-gray-700 leading-relaxed mt-8">
-                Our aim is to provide a well-rounded education that prepares students not just for exams, but for a deeper understanding and appreciation of Mathematics, Science, and Music.
-            </p>
-            <nav class="mt-8">
-                <ul class="flex flex-wrap justify-center space-x-6 text-xl font-semibold">
-                    <li><a href="#home" onclick="showPage('home')" class="nav-link text-teal-800 py-2">Home</a></li>
-                    <li><a href="#about" onclick="showPage('about')" class="nav-link text-teal-800 py-2">About</a></li>
-                    <li><a href="#courses" onclick="showPage('courses')" class="nav-link text-teal-800 py-2">Courses</a></li>
-                    <li><a href="#contact" onclick="showPage('contact')" class="nav-link text-teal-800 py-2">Contact</a></li>
-                    <li><a href="#enroll" onclick="showPage('enroll')" class="nav-link text-teal-800 py-2">Enroll Now</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        <div id="contact" class="page-container" style="display: none;">
-            <h1 class="text-4xl font-extrabold text-gray-800 mb-8">Get in Touch!</h1>
-            <p class="text-lg text-gray-700 leading-relaxed mb-8">
-                We'd love to hear from you. Feel free to reach out to us through any of the following channels:
-            </p>
-
-            <div class="contact-info flex flex-col items-center">
-                <div class="flex items-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8.016 13.91l-1.39-1.39a.5.5 0 010-.707l.707-.707a.5.5 0 01.707 0l.98.98 2.536-2.536a.5.5 0 01.707 0l.707.707a.5.5 0 010 .707l-3.243 3.243a.5.5 0 01-.707 0z" clip-rule="evenodd" />
-                        <path d="M11 6a.5.5 0 01.5.5v2a.5.5 0 01-1 0V6.5a.5.5 0 01.5-.5z" />
-                    </svg>
-                    <p class="text-xl text-gray-800">
-                        <strong>WhatsApp:</strong> <a href="https://wa.me/94710325294" target="_blank" class="text-blue-600 hover:underline">+94710325294</a>
-                    </p>
+            <div class="p-4 border-t border-gray-200 bg-gray-100">
+                <div class="flex items-center">
+                    <input type="text" id="chatbot-input" placeholder="Type your question..." class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button id="send-chatbot-message" class="ml-3 bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
                 </div>
-                <div class="flex items-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0018 4H2a2 2 0 00-.003 1.884z" />
-                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h14a2 2 0 002-2V8.118z" />
-                    </svg>
-                    <p class="text-xl text-gray-800">
-                        <strong>Email:</strong> <a href="mailto:pavanmalinduperera@gmail.com" class="text-blue-600 hover:underline">pavanmalinduperera@gmail.com</a>
-                    </p>
-                </div>
-                <div class="flex items-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-700" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-3.5-7.5a.5.5 0 011 0V11a.5.5 0 01-1 0V10.5zM11 11a.5.5 0 011 0v.5a.5.5 0 01-1 0v-.5zm-1-3a.5.5 0 00-.5.5v3a.5.5 0 001 0v-3A.5.5 0 0010 8z" clip-rule="evenodd" />
-                        <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM9.5 9.5a.5.5 0 00-1 0V10a.5.5 0 001 0V9.5zm2 0a.5.5 0 00-1 0V10a.5.5 0 001 0V9.5zM10 12a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-                    </svg>
-                    <p class="text-xl text-gray-800">
-                        <strong>Facebook:</strong> <a href="https://www.facebook.com/share/1DjKgbYyMp/" target="_blank" class="text-blue-600 hover:underline">Connect on Facebook</a>
-                    </p>
+                <div id="chatbot-loading" class="text-center text-sm text-gray-500 mt-2 hidden">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Thinking...
                 </div>
             </div>
-            <p class="text-lg text-gray-700 leading-relaxed mt-6">
-                We look forward to helping you or your child achieve academic and musical success!
-            </p>
-            <nav class="mt-8">
-                <ul class="flex flex-wrap justify-center space-x-6 text-xl font-semibold">
-                    <li><a href="#home" onclick="showPage('home')" class="nav-link text-gray-800 py-2">Home</a></li>
-                    <li><a href="#about" onclick="showPage('about')" class="nav-link text-gray-800 py-2">About</a></li>
-                    <li><a href="#courses" onclick="showPage('courses')" class="nav-link text-gray-800 py-2">Courses</a></li>
-                    <li><a href="#contact" onclick="showPage('contact')" class="nav-link text-gray-800 py-2">Contact</a></li>
-                    <li><a href="#enroll" onclick="showPage('enroll')" class="nav-link text-gray-800 py-2">Enroll Now</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        <div id="enroll" class="page-container" style="display: none;">
-            <h1 class="text-4xl font-extrabold text-indigo-700 mb-8">Student Enrollment Form</h1>
-            <p class="text-lg text-gray-700 leading-relaxed mb-8">
-                Please fill out the form below to enroll for our tuition classes. Your details will be sent directly to our WhatsApp.
-            </p>
-
-            <form id="enrollmentForm" onsubmit="sendToWhatsApp(event)" class="text-left">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="form-group">
-                        <label for="studentName">Student Full Name:</label>
-                        <input type="text" id="studentName" name="studentName" placeholder="E.g., John Doe" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="studentAge">Student Age:</label>
-                        <input type="number" id="studentAge" name="studentAge" min="10" max="18" placeholder="E.g., 14" required>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="form-group">
-                        <label for="studentGrade">Student Grade (6-11 O/L):</label>
-                        <select id="studentGrade" name="studentGrade" required>
-                            <option value="">Select Grade</option>
-                            <option value="6">Grade 6</option>
-                            <option value="7">Grade 7</option>
-                            <option value="8">Grade 8</option>
-                            <option value="9">Grade 9</option>
-                            <option value="10">Grade 10</option>
-                            <option value="11">Grade 11 (O/L)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Subject(s) Willing to Join:</label>
-                        <div class="flex flex-wrap gap-x-6">
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" name="subjects" value="Mathematics" class="form-checkbox text-indigo-600">
-                                <span class="ml-2 text-gray-700">Mathematics</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" name="subjects" value="Science" class="form-checkbox text-indigo-600">
-                                <span class="ml-2 text-gray-700">Science</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" name="subjects" value="Music" class="form-checkbox text-indigo-600">
-                                <span class="ml-2 text-gray-700">Music</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="parentName">Parent/Guardian Full Name:</label>
-                    <input type="text" id="parentName" name="parentName" placeholder="E.g., Jane Doe" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="homeAddress">Home Address:</label>
-                    <textarea id="homeAddress" name="homeAddress" rows="3" placeholder="Street Address, City, Postal Code" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="parentContact">Parent/Guardian Contact Number:</label>
-                    <input type="tel" id="parentContact" name="parentContact" placeholder="E.g., +9471XXXXXXX" required>
-                </div>
-                <div class="form-group">
-                    <label for="parentEmail">Parent/Guardian Email (Optional):</label>
-                    <input type="email" id="parentEmail" name="parentEmail" placeholder="E.g., janedoe@example.com">
-                </div>
-
-                <div class="text-center mt-8">
-                    <button type="submit" class="submit-button">Send Enrollment via WhatsApp</button>
-                </div>
-            </form>
-
-            <nav class="mt-8">
-                <ul class="flex flex-wrap justify-center space-x-6 text-xl font-semibold">
-                    <li><a href="#home" onclick="showPage('home')" class="nav-link text-indigo-800 py-2">Home</a></li>
-                    <li><a href="#about" onclick="showPage('about')" class="nav-link text-indigo-800 py-2">About</a></li>
-                    <li><a href="#courses" onclick="showPage('courses')" class="nav-link text-indigo-800 py-2">Courses</a></li>
-                    <li><a href="#contact" onclick="showPage('contact')" class="nav-link text-indigo-800 py-2">Contact</a></li>
-                    <li><a href="#enroll" onclick="showPage('enroll')" class="nav-link text-indigo-800 py-2">Enroll Now</a></li>
-                </ul>
-            </nav>
         </div>
     </div>
 
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closePaymentModal()">&times;</span>
-            <h2 class="text-3xl font-bold text-blue-700 mb-4">Online Payment Information</h2>
-            <p class="text-lg text-gray-700 mb-6">
-                Online card payment facilities are currently under development and will be available soon!
-                <br><br>
-                For now, please contact us directly to arrange your class fee payments. You can reach us via:
-            </p>
-            <p class="text-xl text-gray-800 mb-2">
-                <strong class="text-blue-600">WhatsApp:</strong> <a href="https://wa.me/94710325294" target="_blank" class="text-blue-600 hover:underline">+94710325294</a>
-            </p>
-            <p class="text-xl text-gray-800">
-                <strong class="text-blue-600">Email:</strong> <a href="mailto:pavanmalinduperera@gmail.com" class="text-blue-600 hover:underline">pavanmalinduperera@gmail.com</a>
-            </p>
-        </div>
-    </div>
+    <!-- AI Chatbot Button (Floating) -->
+    <button id="open-chatbot" class="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-110 z-30">
+        <i class="fas fa-comments text-2xl"></i> <!-- Changed to chat icon -->
+    </button>
 
     <script>
-        // JavaScript to handle page visibility and background changes
-        function showPage(pageId) {
-            // Hide all pages
-            const pages = document.querySelectorAll('.page-container');
-            pages.forEach(page => {
-                page.style.display = 'none';
-            });
+        // Store the current page and its background class
+        let currentPage = 'home';
+        let currentBgClass = 'bg-home';
 
-            // Show the selected page
-            const selectedPage = document.getElementById(pageId);
-            selectedPage.style.display = 'block';
+        // Function to dynamically load page content
+        function loadPage(pageName) {
+            const contentArea = document.getElementById('content-area');
+            let pageContent = '';
+            let newBgClass = '';
 
-            // Apply animation class to the page container
-            selectedPage.style.animation = ''; // Reset animation
-            void selectedPage.offsetWidth; // Trigger reflow to restart animation
-            selectedPage.style.animation = getPageAnimation(pageId);
+            // Remove previous background class and add new one for transition
+            contentArea.classList.remove(currentBgClass);
+            contentArea.classList.add('page-exit-active'); // Add exit animation class
 
-            // Change body background based on the page
-            const body = document.body;
-            body.id = `${pageId}-page`; // Set ID on body for background styling
-            window.location.hash = pageId; // Update URL hash for direct linking/refresh
+            // Delay content update and new background application to allow exit animation
+            setTimeout(() => {
+                switch (pageName) {
+                    case 'home':
+                        pageContent = `
+                            <div class="text-center text-gray-800 max-w-4xl mx-auto page-enter-active">
+                                <h2 class="text-5xl md:text-6xl font-extrabold mb-6 text-blue-700 leading-tight">
+                                    Unlock Your Potential <br> with Road A Institute
+                                </h2>
+                                <p class="text-xl md:text-2xl mb-8 text-gray-700">
+                                    Expert Tuition in Mathematics, Science & Music for Grade 6-11 O/L Students.
+                                </p>
+                                <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-6 mb-12">
+                                    <button class="bg-blue-600 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="loadPage('enroll')">
+                                        <i class="fas fa-user-plus mr-3"></i> Join a Class
+                                    </button>
+                                    <button class="bg-purple-600 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105" onclick="loadPage('courses')">
+                                        <i class="fas fa-book-open mr-3"></i> Explore Courses
+                                    </button>
+                                </div>
+
+                                <!-- Our Teaching Methodology -->
+                                <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 mt-12 w-full">
+                                    <h3 class="text-4xl font-bold text-center text-blue-700 mb-8">Our Teaching Methodology</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        <div class="bg-gradient-to-br from-green-100 to-green-200 p-6 rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300">
+                                            <div class="text-5xl text-green-600 mb-4"><i class="fas fa-clipboard-list"></i></div>
+                                            <h4 class="text-2xl font-bold text-green-800 mb-2">Comprehensive Practice</h4>
+                                            <p class="text-gray-700">Master concepts through extensive past papers, unit papers, and challenging speed tests.</p>
+                                        </div>
+                                        <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 p-6 rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300">
+                                            <div class="text-5xl text-yellow-600 mb-4"><i class="fas fa-flask"></i></div>
+                                            <h4 class="text-2xl font-bold text-yellow-800 mb-2">Hands-on Learning</h4>
+                                            <p class="text-gray-700">Engage with practicals and real-world applications to solidify understanding.</p>
+                                        </div>
+                                        <div class="bg-gradient-to-br from-red-100 to-red-200 p-6 rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300">
+                                            <div class="text-5xl text-red-600 mb-4"><i class="fas fa-lightbulb"></i></div>
+                                            <h4 class="text-2xl font-bold text-red-800 mb-2">Deep Theoretical Grasp</h4>
+                                            <p class="text-gray-700">Thorough explanations of theories and lessons ensure a strong foundational knowledge.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Study Tip Section -->
+                                <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 mt-12 w-full max-w-2xl mx-auto">
+                                    <h3 class="text-4xl font-bold text-center text-blue-700 mb-8">Daily Study Tip</h3>
+                                    <p id="study-tip-display" class="text-lg text-gray-700 mb-6 italic">Click the button below to get a new study tip!</p>
+                                    <button class="bg-pink-600 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg hover:bg-pink-700 transition-all duration-300 transform hover:scale-105" onclick="generateStudyTip()">
+                                        Get a Study Tip ✨
+                                    </button>
+                                    <div id="study-tip-loading" class="text-center text-sm text-gray-500 mt-2 hidden">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i> Generating...
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        newBgClass = 'bg-home';
+                        break;
+                    case 'about':
+                        pageContent = `
+                            <div class="text-center text-gray-800 max-w-5xl mx-auto page-enter-active">
+                                <h2 class="text-5xl md:text-6xl font-extrabold mb-12 text-blue-700">About Road A Institute</h2>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                    <div class="bg-gradient-to-br from-blue-100 to-blue-200 p-8 rounded-2xl shadow-xl border border-blue-300 transform hover:scale-105 transition-transform duration-300">
+                                        <div class="text-6xl text-blue-600 mb-6"><i class="fas fa-users"></i></div>
+                                        <h3 class="text-4xl font-bold text-blue-800 mb-4">Our Story</h3>
+                                        <p class="text-lg text-gray-700 leading-relaxed">
+                                            Road A Institute is a dedicated tuition center coordinated by myself, <strong class="font-semibold">Pavan Malindu Perera</strong>, a Marine Engineer and a Music Visharad degree holder, alongside the invaluable support of <strong class="font-semibold">Mrs. Himaya</strong>. We are committed to nurturing young minds from Grade 6 to 11 O/L, providing a holistic learning experience.
+                                        </p>
+                                    </div>
+                                    <div class="bg-gradient-to-br from-purple-100 to-purple-200 p-8 rounded-2xl shadow-xl border border-purple-300 transform hover:scale-105 transition-transform duration-300">
+                                        <div class="text-6xl text-purple-600 mb-6"><i class="fas fa-heartbeat"></i></div>
+                                        <h3 class="text-4xl font-bold text-purple-800 mb-4">Our Passion</h3>
+                                        <p class="text-lg text-gray-700 leading-relaxed">
+                                            Our passion lies in empowering students to excel. We achieve this through rigorous practice with past papers, challenging unit papers, stimulating speed tests, hands-on practicals, in-depth theories, and comprehensive lesson coverage. Every session is designed to build confidence and ensure mastery.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 mt-12 w-full max-w-2xl mx-auto">
+                                    <h3 class="text-3xl font-bold text-center text-blue-700 mb-6">Our Commitment</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                        We believe in creating a supportive and engaging environment where every student can thrive. Our personalized approach ensures that individual learning needs are met, fostering a deep understanding and love for Mathematics, Science, and Music.
+                                    </p>
+                                </div>
+                            </div>
+                        `;
+                        newBgClass = 'bg-about';
+                        break;
+                    case 'courses':
+                        pageContent = `
+                            <div class="text-center text-gray-800 max-w-4xl mx-auto page-enter-active">
+                                <h2 class="text-5xl md:text-6xl font-extrabold mb-12 text-blue-700">Our Diverse Courses</h2>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                    <div class="bg-gradient-to-br from-green-100 to-green-200 p-8 rounded-2xl shadow-xl border border-green-300 transform hover:scale-105 transition-transform duration-300">
+                                        <div class="text-6xl text-green-600 mb-6"><i class="fas fa-calculator"></i></div>
+                                        <h3 class="text-3xl font-bold text-green-800 mb-4">Mathematics</h3>
+                                        <p class="text-lg text-gray-700 leading-relaxed">
+                                            From foundational concepts to advanced problem-solving, our Math classes make complex topics simple and engaging for all O/L students.
+                                        </p>
+                                        <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300" onclick="generateCourseDetails('Mathematics')">
+                                            Generate More Details ✨
+                                        </button>
+                                        <div id="details-mathematics" class="mt-3 text-sm text-gray-600"></div>
+                                        <div id="loading-mathematics" class="text-center text-sm text-gray-500 mt-2 hidden">
+                                            <i class="fas fa-spinner fa-spin mr-2"></i> Generating...
+                                        </div>
+                                    </div>
+                                    <div class="bg-gradient-to-br from-red-100 to-red-200 p-8 rounded-2xl shadow-xl border border-red-300 transform hover:scale-105 transition-transform duration-300">
+                                        <div class="text-6xl text-red-600 mb-6"><i class="fas fa-microscope"></i></div>
+                                        <h3 class="text-3xl font-bold text-red-800 mb-4">Science</h3>
+                                        <p class="text-lg text-gray-700 leading-relaxed">
+                                            Explore the wonders of Science with practical experiments, clear theoretical explanations, and a focus on critical thinking.
+                                        </p>
+                                        <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300" onclick="generateCourseDetails('Science')">
+                                            Generate More Details ✨
+                                        </button>
+                                        <div id="details-science" class="mt-3 text-sm text-gray-600"></div>
+                                        <div id="loading-science" class="text-center text-sm text-gray-500 mt-2 hidden">
+                                            <i class="fas fa-spinner fa-spin mr-2"></i> Generating...
+                                        </div>
+                                    </div>
+                                    <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 p-8 rounded-2xl shadow-xl border border-yellow-300 transform hover:scale-105 transition-transform duration-300">
+                                        <div class="text-6xl text-yellow-600 mb-6"><i class="fas fa-music"></i></div>
+                                        <h3 class="text-3xl font-bold text-yellow-800 mb-4">Music</h3>
+                                        <p class="text-lg text-gray-700 leading-relaxed">
+                                            Unleash your musical talent! Our Music classes cover theory, practical skills, and appreciation for students of all levels.
+                                        </p>
+                                        <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300" onclick="generateCourseDetails('Music')">
+                                            Generate More Details ✨
+                                        </button>
+                                        <div id="details-music" class="mt-3 text-sm text-gray-600"></div>
+                                        <div id="loading-music" class="text-center text-sm text-gray-500 mt-2 hidden">
+                                            <i class="fas fa-spinner fa-spin mr-2"></i> Generating...
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        newBgClass = 'bg-courses';
+                        break;
+                    case 'contact':
+                        pageContent = `
+                            <div class="text-center text-gray-800 max-w-3xl mx-auto page-enter-active">
+                                <h2 class="text-5xl md:text-6xl font-extrabold mb-12 text-blue-700">Get In Touch</h2>
+
+                                <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div class="flex flex-col items-center p-6 bg-gradient-to-br from-green-100 to-green-200 rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300">
+                                        <div class="text-6xl text-green-600 mb-4"><i class="fab fa-whatsapp"></i></div>
+                                        <h3 class="text-2xl font-bold text-green-800 mb-2">WhatsApp</h3>
+                                        <a href="https://wa.me/94710325294" target="_blank" class="text-blue-600 hover:underline text-lg font-medium">+94 71 032 5294</a>
+                                    </div>
+                                    <div class="flex flex-col items-center p-6 bg-gradient-to-br from-red-100 to-red-200 rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300">
+                                        <div class="text-6xl text-red-600 mb-4"><i class="fas fa-envelope"></i></div>
+                                        <h3 class="text-2xl font-bold text-red-800 mb-2">Email Address</h3>
+                                        <a href="mailto:pavanmalinduperera@gmail.com" class="text-blue-600 hover:underline text-lg font-medium">pavanmalinduperera@gmail.com</a>
+                                    </div>
+                                    <div class="flex flex-col items-center p-6 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300 col-span-1 md:col-span-2">
+                                        <div class="text-6xl text-blue-600 mb-4"><i class="fab fa-facebook"></i></div>
+                                        <h3 class="text-2xl font-bold text-blue-800 mb-2">Facebook Page</h3>
+                                        <a href="https://www.facebook.com/share/1DjKgbYyMp/" target="_blank" class="text-blue-600 hover:underline text-lg font-medium">Road A Institute Facebook</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        newBgClass = 'bg-contact';
+                        break;
+                    case 'enroll':
+                        pageContent = `
+                            <div class="text-center text-gray-800 max-w-3xl mx-auto page-enter-active">
+                                <h2 class="text-5xl md:text-6xl font-extrabold mb-12 text-purple-700">Enroll Now!</h2>
+                                <p class="text-xl text-gray-700 mb-8">Fill out the form below to join our classes.</p>
+
+                                <form id="enrollment-form" class="bg-white p-8 rounded-2xl shadow-xl border border-purple-300 text-left">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label for="student-name" class="block text-lg font-medium text-gray-700 mb-2">Student Name:</label>
+                                            <input type="text" id="student-name" name="studentName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required>
+                                        </div>
+                                        <div>
+                                            <label for="student-age" class="block text-lg font-medium text-gray-700 mb-2">Age:</label>
+                                            <select id="student-age" name="studentAge" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required>
+                                                <option value="">Select Age</option>
+                                                <!-- Age options will be populated by JS -->
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="student-grade" class="block text-lg font-medium text-gray-700 mb-2">Grade:</label>
+                                            <select id="student-grade" name="studentGrade" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required>
+                                                <option value="">Select Grade</option>
+                                                <!-- Grade options will be populated by JS -->
+                                            </select>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label class="block text-lg font-medium text-gray-700 mb-2">Subject(s) Willing to Join:</label>
+                                            <div class="flex flex-col space-y-2">
+                                                <label class="inline-flex items-center">
+                                                    <input type="checkbox" name="subjects" value="Mathematics" class="form-checkbox h-5 w-5 text-purple-600 rounded focus:ring-purple-500" onchange="handleSubjectChange()">
+                                                    <span class="ml-2 text-gray-700 text-lg">Mathematics</span>
+                                                </label>
+                                                <label class="inline-flex items-center">
+                                                    <input type="checkbox" name="subjects" value="Science" class="form-checkbox h-5 w-5 text-purple-600 rounded focus:ring-purple-500" onchange="handleSubjectChange()">
+                                                    <span class="ml-2 text-gray-700 text-lg">Science</span>
+                                                </label>
+                                                <label class="inline-flex items-center">
+                                                    <input type="checkbox" name="subjects" value="Music" class="form-checkbox h-5 w-5 text-purple-600 rounded focus:ring-purple-500" onchange="handleSubjectChange()">
+                                                    <span class="ml-2 text-gray-700 text-lg">Music</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="parent-name" class="block text-lg font-medium text-gray-700 mb-2">Parent/Guardian Name:</label>
+                                            <input type="text" id="parent-name" name="parentName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="home-address" class="block text-lg font-medium text-gray-700 mb-2">Home Address:</label>
+                                            <textarea id="home-address" name="homeAddress" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required></textarea>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="contact-number" class="block text-lg font-medium text-gray-700 mb-2">Contact Number:</label>
+                                            <input type="tel" id="contact-number" name="contactNumber" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" pattern="[0-9]{10}" placeholder="e.g., 0712345678" required>
+                                            <p class="text-sm text-gray-500 mt-1">Format: 10 digits (e.g., 0712345678)</p>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="mt-8 w-full bg-purple-600 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105">
+                                        <i class="fas fa-paper-plane mr-3"></i> Send Enrollment Request
+                                    </button>
+                                </form>
+                            </div>
+                        `;
+                        newBgClass = 'bg-enroll';
+                        break;
+                    case 'payment':
+                        pageContent = `
+                            <div class="text-center text-gray-800 max-w-2xl mx-auto page-enter-active">
+                                <h2 class="text-5xl md:text-6xl font-extrabold mb-12 text-red-700">Online Payments</h2>
+                                <p class="text-xl text-gray-700 mb-8">Securely pay your class fees here.</p>
+
+                                <form id="payment-form" class="bg-white p-8 rounded-2xl shadow-xl border border-red-300 text-left">
+                                    <div class="space-y-6">
+                                        <div>
+                                            <label for="card-number" class="block text-lg font-medium text-gray-700 mb-2">Card Number (16 Digits):</label>
+                                            <input type="text" id="card-number" name="cardNumber" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" pattern="[0-9]{16}" placeholder="e.g., 1234567890123456" required>
+                                            <p class="text-sm text-gray-500 mt-1">Please enter a 16-digit card number.</p>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div>
+                                                <label for="expiry-date" class="block text-lg font-medium text-gray-700 mb-2">Expiry Date (MM/YY):</label>
+                                                <input type="text" id="expiry-date" name="expiryDate" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" pattern="(0[1-9]|1[0-2])\/[0-9]{2}" placeholder="e.g., 12/25" required>
+                                                <p class="text-sm text-gray-500 mt-1">Format: MM/YY</p>
+                                            </div>
+                                            <div>
+                                                <label for="security-code" class="block text-lg font-medium text-gray-700 mb-2">Security Code (CVV):</label>
+                                                <input type="text" id="security-code" name="securityCode" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" pattern="[0-9]{3,4}" placeholder="e.g., 123" required>
+                                                <p class="text-sm text-gray-500 mt-1">3 or 4 digits</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="mt-8 w-full bg-red-600 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg hover:bg-red-700 transition-all duration-300 transform hover:scale-105">
+                                        <i class="fas fa-credit-card mr-3"></i> Make Payment
+                                    </button>
+                                
+                                </form>
+
+                                <div id="payment-success-message" class="hidden mt-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative" role="alert">
+                                    <strong class="font-bold">Payment Simulated!</strong>
+                                    <span class="block sm:inline"> Click below to send your receipt via WhatsApp.</span>
+                                    <button id="send-receipt-whatsapp" class="mt-4 w-full bg-green-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105">
+                                        <i class="fab fa-whatsapp mr-3"></i> Send Receipt via WhatsApp
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        newBgClass = 'bg-payment';
+                        break;
+                    default:
+                        pageContent = `<div class="text-center text-gray-800"><h2 class="text-4xl font-bold">Page Not Found</h2><p class="text-lg mt-4">The page you requested does not exist.</p></div>`;
+                        newBgClass = 'bg-gray-100'; // Default fallback
+                }
+
+                contentArea.innerHTML = pageContent;
+                contentArea.classList.remove('page-exit-active');
+                contentArea.classList.add(newBgClass); // Add new background class
+                contentArea.classList.add('page-enter-active'); // Add enter animation class
+
+                // Update current page and background class
+                currentPage = pageName;
+                currentBgClass = newBgClass;
+
+                // Re-attach event listeners for forms if they are on the new page
+                if (pageName === 'enroll') {
+                    document.getElementById('enrollment-form').addEventListener('submit', handleEnrollmentSubmit);
+                    populateAgeAndGradeOptions(); // Populate dropdowns
+                    handleSubjectChange(); // Initial call to set required status
+                } else if (pageName === 'payment') {
+                    document.getElementById('payment-form').addEventListener('submit', handlePaymentSubmit);
+                    // Re-attach listener for WhatsApp receipt button as it's dynamically added
+                    document.getElementById('send-receipt-whatsapp').addEventListener('click', handleSendReceiptWhatsApp);
+                }
+
+                // Update active navigation link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.page === pageName) {
+                        link.classList.add('active');
+                    }
+                });
+
+            }, 800); // Wait for exit animation to complete
         }
 
-        function getPageAnimation(pageId) {
-            switch (pageId) {
-                case 'home': return 'fadeIn 1s ease-out';
-                case 'about': return 'slideInLeft 1s ease-out';
-                case 'courses': return 'slideInRight 1s ease-out';
-                case 'contact': return 'fadeInScale 1s ease-out';
-                case 'enroll': return 'slideInUp 1s ease-out';
-                default: return 'none';
+        // Function to populate age and grade dropdowns
+        function populateAgeAndGradeOptions() {
+            const ageSelect = document.getElementById('student-age');
+            const gradeSelect = document.getElementById('student-grade');
+
+            // Clear existing options except the first "Select Age/Grade"
+            ageSelect.innerHTML = '<option value="">Select Age</option>';
+            gradeSelect.innerHTML = '<option value="">Select Grade</option>';
+
+            // Populate age options 10-16
+            for (let i = 10; i <= 16; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                ageSelect.appendChild(option);
+            }
+
+            // Populate grade options 6-11
+            for (let i = 6; i <= 11; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                gradeSelect.appendChild(option);
             }
         }
 
-        // Initialize with the home page shown and its background
-        document.addEventListener('DOMContentLoaded', () => {
-            const hash = window.location.hash.substring(1);
-            if (hash && document.getElementById(hash)) {
-                showPage(hash);
+        // Function to handle subject checkbox changes and apply age/grade restrictions
+        function handleSubjectChange() {
+            const mathScienceCheckboxes = document.querySelectorAll('input[name="subjects"][value="Mathematics"], input[name="subjects"][value="Science"]');
+            const musicCheckbox = document.querySelector('input[name="subjects"][value="Music"]');
+            const ageSelect = document.getElementById('student-age');
+            const gradeSelect = document.getElementById('student-grade');
+
+            let isMathScienceSelected = false;
+            mathScienceCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    isMathScienceSelected = true;
+                }
+            });
+
+            const isOnlyMusicSelected = musicCheckbox.checked && !isMathScienceSelected;
+
+            if (isOnlyMusicSelected) {
+                ageSelect.removeAttribute('required');
+                gradeSelect.removeAttribute('required');
             } else {
-                showPage('home');
+                ageSelect.setAttribute('required', 'required');
+                gradeSelect.setAttribute('required', 'required');
+            }
+        }
+
+
+        // Handle Enrollment Form Submission
+        function handleEnrollmentSubmit(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            // Manually collect selected subjects from checkboxes
+            const selectedSubjects = [];
+            form.querySelectorAll('input[name="subjects"]:checked').forEach(checkbox => {
+                selectedSubjects.push(checkbox.value);
+            });
+            data.subjects = selectedSubjects.join(', ') || 'No subjects selected'; // Handle case where none are selected
+
+            const age = parseInt(data.studentAge);
+            const grade = parseInt(data.studentGrade);
+
+            // Check if Mathematics or Science is selected for validation
+            const isMathScienceSelected = selectedSubjects.includes('Mathematics') || selectedSubjects.includes('Science');
+
+            if (isMathScienceSelected) {
+                if (isNaN(age) || age < 10 || age > 16) {
+                    showMessageBox("For Mathematics/Science, age must be between 10 and 16.");
+                    return;
+                }
+                if (isNaN(grade) || grade < 6 || grade > 11) {
+                    showMessageBox("For Mathematics/Science, grade must be between 6 and 11.");
+                    return;
+                }
+            } else if (selectedSubjects.length === 0) {
+                 showMessageBox("Please select at least one subject.");
+                 return;
+            }
+
+
+            const message = `
+*New Student Enrollment Request:*
+
+*Student Details:*
+Name: ${data.studentName}
+Age: ${data.studentAge}
+Grade: ${data.studentGrade}
+Subject(s): ${data.subjects}
+
+*Parent/Guardian Details:*
+Name: ${data.parentName}
+Contact: ${data.contactNumber}
+
+*Home Address:*
+${data.homeAddress}
+            `.trim(); // Trim to remove leading/trailing whitespace
+
+            // Open WhatsApp chat
+            window.open(`https://wa.me/94710325294?text=${encodeURIComponent(message)}`, '_blank');
+
+            // Clear form
+            form.reset();
+            // Show a temporary success message
+            const contentArea = document.getElementById('content-area');
+            const successDiv = document.createElement('div');
+            successDiv.className = 'mt-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative text-center';
+            successDiv.innerHTML = '<strong class="font-bold">Enrollment Request Sent!</strong><span class="block sm:inline"> Please check WhatsApp to confirm.</span>';
+            contentArea.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 5000); // Remove after 5 seconds
+        }
+
+        // Handle Payment Form Submission
+        function handlePaymentSubmit(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const form = event.target;
+            const cardNumber = form.elements['cardNumber'].value;
+            const expiryDate = form.elements['expiryDate'].value;
+            const securityCode = form.elements['securityCode'].value;
+
+            // Basic validation (more robust validation would be needed for a real payment gateway)
+            if (cardNumber.length !== 16 || isNaN(cardNumber)) {
+                showMessageBox("Please enter a valid 16-digit card number.");
+                return;
+            }
+            if (!/^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(expiryDate)) {
+                showMessageBox("Please enter a valid expiry date (MM/YY).");
+                return;
+            }
+            if (!/^[0-9]{3,4}$/.test(securityCode)) {
+                showMessageBox("Please enter a valid 3 or 4 digit security code.");
+                return;
+            }
+
+            // Simulate payment success
+            document.getElementById('payment-success-message').classList.remove('hidden');
+            form.reset(); // Clear form
+            // Hide the payment form itself
+            form.classList.add('hidden');
+        }
+
+        // Handle Send Receipt via WhatsApp
+        function handleSendReceiptWhatsApp() {
+            const message = `
+*Payment Receipt - Road A Institute*
+
+Dear Student/Parent,
+
+Thank you for your payment to Road A Institute. Your transaction has been successfully processed.
+
+We appreciate your trust in us!
+
+Best Regards,
+Road A Institute
+            `.trim();
+
+            window.open(`https://wa.me/94710325294?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // Custom Message Box Function (replaces alert())
+        function showMessageBox(message) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100] p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl shadow-2xl p-8 max-w-sm w-full text-center">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Notification</h3>
+                    <p class="text-gray-700 mb-6">${message}</p>
+                    <button class="bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition-colors duration-300" onclick="this.closest('.fixed').remove()">OK</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // AI Chatbot Logic
+        const chatbotModal = document.getElementById('chatbot-modal');
+        const openChatbotBtn = document.getElementById('open-chatbot');
+        const closeChatbotBtn = document.getElementById('close-chatbot');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const sendChatbotMessageBtn = document.getElementById('send-chatbot-message');
+        const chatbotLoading = document.getElementById('chatbot-loading');
+
+        openChatbotBtn.addEventListener('click', () => {
+            chatbotModal.classList.remove('hidden');
+            chatbotInput.focus();
+        });
+
+        closeChatbotBtn.addEventListener('click', () => {
+            chatbotModal.classList.add('hidden');
+        });
+
+        sendChatbotMessageBtn.addEventListener('click', sendMessage);
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         });
 
-        // --- Payment Modal Functions ---
-        function showPaymentModal() {
-            document.getElementById('paymentModal').style.display = 'flex';
-        }
+        async function sendMessage() {
+            const userMessage = chatbotInput.value.trim();
+            if (!userMessage) return;
 
-        function closePaymentModal() {
-            document.getElementById('paymentModal').style.display = 'none';
-        }
+            // Display user message
+            appendMessage(userMessage, 'user');
+            chatbotInput.value = '';
+            chatbotLoading.classList.remove('hidden'); // Show loading indicator
 
-        // Close modal if clicked outside content
-        window.onclick = function(event) {
-            const modal = document.getElementById('paymentModal');
-            if (event.target == modal) {
-                modal.style.display = "none";
+            // Context for the AI
+            const classContext = `
+Road A Institute provides tuition for Mathematics, Science, and Music for Grade 6 to 11 O/L students.
+The institute is coordinated by Pavan Malindu Perera (a Marine Engineer and Music Visharad degree holder) and Mrs. Himaya.
+Our teaching methodology includes practicing past papers, unit papers, speed tests, practicals, theories, and lessons.
+You can contact us via WhatsApp: +94710325294, Email: pavanmalinduperera@gmail.com, or Facebook: https://www.facebook.com/share/1DjKgbYyMp/.
+`;
+
+            let chatHistory = [];
+            // Add system instruction/context for the AI
+            chatHistory.push({ role: "user", parts: [{ text: `You are an AI assistant for Road A Institute. Answer questions about the tuition classes based on the following information. If a question is outside this scope, politely state that you can only answer questions related to Road A Institute's classes.
+${classContext}
+
+User's question: ${userMessage}` }] });
+
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // Canvas will automatically provide this at runtime
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const aiResponse = result.candidates[0].content.parts[0].text;
+                    appendMessage(aiResponse, 'ai');
+                } else {
+                    appendMessage("Sorry, I couldn't get a response from the AI. Please try again.", 'ai');
+                    console.error("AI response structure unexpected:", result);
+                }
+            } catch (error) {
+                console.error("Error communicating with Gemini API:", error);
+                appendMessage("Sorry, I'm having trouble connecting to the AI. Please try again later.", 'ai');
+            } finally {
+                chatbotLoading.classList.add('hidden'); // Hide loading indicator
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Scroll to bottom
             }
         }
 
-        // --- WhatsApp Enrollment Form Submission ---
-        function sendToWhatsApp(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            const form = document.getElementById('enrollmentForm');
-            const studentName = form.studentName.value;
-            const studentAge = form.studentAge.value;
-            const studentGrade = form.studentGrade.value;
-            const parentName = form.parentName.value;
-            const homeAddress = form.homeAddress.value;
-            const parentContact = form.parentContact.value;
-            const parentEmail = form.parentEmail.value;
-
-            // Get selected subjects
-            const selectedSubjects = Array.from(form.elements.subjects)
-                                        .filter(checkbox => checkbox.checked)
-                                        .map(checkbox => checkbox.value)
-                                        .join(', ') || 'Not specified';
-
-            // Construct the WhatsApp message
-            let message = `*Road A Institute - New Student Enrollment*
-
-`;
-            message += `*Student Details:*
-`;
-            message += `Name: ${studentName}
-`;
-            message += `Age: ${studentAge}
-`;
-            message += `Grade: ${studentGrade}
-`;
-            message += `Subjects Interested: ${selectedSubjects}
-
-`;
-            message += `*Parent/Guardian Details:*
-`;
-            message += `Name: ${parentName}
-`;
-            message += `Contact No: ${parentContact}
-`;
-            message += `Email: ${parentEmail || 'N/A'}
-`;
-            message += `Home Address: ${homeAddress}
-
-`;
-            message += `_This enrollment request was sent from the website._`;
-
-            // Encode the message for URL
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappNumber = '+94710325294'; // Your WhatsApp number
-
-            // Open WhatsApp with the pre-filled message
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-            window.open(whatsappUrl, '_blank');
-
-            // Optionally, show a confirmation message
-            alert('Your enrollment details have been prepared for WhatsApp. Please click "Send" in WhatsApp to complete the submission!');
-
-            // Optional: Clear the form after submission attempt
-            form.reset();
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex mb-2 ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+            messageDiv.innerHTML = `
+                <div class="p-3 rounded-lg max-w-[80%] shadow ${sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}">
+                    ${text}
+                </div>
+            `;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Scroll to bottom
         }
+
+        // Gemini API powered features
+        async function generateCourseDetails(subject) {
+            const displayDiv = document.getElementById(`details-${subject.toLowerCase()}`);
+            const loadingDiv = document.getElementById(`loading-${subject.toLowerCase()}`);
+            displayDiv.innerHTML = ''; // Clear previous content
+            loadingDiv.classList.remove('hidden'); // Show loading
+
+            const prompt = `Generate a concise, engaging paragraph (max 80 words) about what makes the ${subject} tuition class at Road A Institute unique and beneficial for Grade 6-11 O/L students. Focus on specific aspects like problem-solving, practicals, or theoretical depth.`;
+
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    displayDiv.innerHTML = result.candidates[0].content.parts[0].text;
+                } else {
+                    displayDiv.innerHTML = "Failed to generate details. Please try again.";
+                    console.error("AI response structure unexpected:", result);
+                }
+            } catch (error) {
+                console.error(`Error generating ${subject} details:`, error);
+                displayDiv.innerHTML = "Error connecting to AI. Please try again.";
+            } finally {
+                loadingDiv.classList.add('hidden'); // Hide loading
+            }
+        }
+
+        async function generateStudyTip() {
+            const displayDiv = document.getElementById('study-tip-display');
+            const loadingDiv = document.getElementById('study-tip-loading');
+            displayDiv.innerHTML = ''; // Clear previous content
+            loadingDiv.classList.remove('hidden'); // Show loading
+
+            const prompt = `Generate a short, actionable study tip (max 50 words) for a Grade 6-11 O/L student in Sri Lanka, focusing on general study habits, time management, or exam preparation. Make it encouraging.`;
+
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    displayDiv.innerHTML = result.candidates[0].content.parts[0].text;
+                } else {
+                    displayDiv.innerHTML = "Failed to generate tip. Please try again.";
+                    console.error("AI response structure unexpected:", result);
+                }
+            } catch (error) {
+                console.error("Error generating study tip:", error);
+                displayDiv.innerHTML = "Error connecting to AI. Please try again.";
+            } finally {
+                loadingDiv.classList.add('hidden'); // Hide loading
+            }
+        }
+
+        // Initial page load and event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load the home page initially
+            loadPage('home');
+
+            // Attach event listeners to navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loadPage(e.target.dataset.page);
+                });
+            });
+        });
     </script>
 </body>
 </html>
