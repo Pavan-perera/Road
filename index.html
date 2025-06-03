@@ -179,6 +179,9 @@
             let pageContent = '';
             let newBgClass = '';
 
+            // Store the current page in localStorage
+            localStorage.setItem('lastPage', pageName);
+
             // Remove previous background class and add new one for transition
             contentArea.classList.remove(currentBgClass);
             contentArea.classList.add('page-exit-active'); // Add exit animation class
@@ -362,18 +365,18 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <label for="student-name" class="block text-lg font-medium text-gray-700 mb-2">Student Name:</label>
-                                            <input type="text" id="student-name" name="studentName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required>
+                                            <input type="text" id="student-name" name="studentName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required oninput="saveEnrollmentData(this)">
                                         </div>
                                         <div>
                                             <label for="student-age" class="block text-lg font-medium text-gray-700 mb-2">Age:</label>
-                                            <select id="student-age" name="studentAge" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required>
+                                            <select id="student-age" name="studentAge" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required onchange="saveEnrollmentData(this)">
                                                 <option value="">Select Age</option>
                                                 <!-- Age options will be populated by JS -->
                                             </select>
                                         </div>
                                         <div>
                                             <label for="student-grade" class="block text-lg font-medium text-gray-700 mb-2">Grade:</label>
-                                            <select id="student-grade" name="studentGrade" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required>
+                                            <select id="student-grade" name="studentGrade" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required onchange="saveEnrollmentData(this)">
                                                 <option value="">Select Grade</option>
                                                 <!-- Grade options will be populated by JS -->
                                             </select>
@@ -382,30 +385,30 @@
                                             <label class="block text-lg font-medium text-gray-700 mb-2">Subject(s) Willing to Join:</label>
                                             <div class="flex flex-col space-y-2">
                                                 <label class="inline-flex items-center">
-                                                    <input type="checkbox" name="subjects" value="Mathematics" class="form-checkbox h-5 w-5 text-purple-600 rounded focus:ring-purple-500" onchange="handleSubjectChange()">
+                                                    <input type="checkbox" name="subjects" value="Mathematics" class="form-checkbox h-5 w-5 text-purple-600 rounded focus:ring-purple-500" onchange="handleSubjectChange(); saveEnrollmentData(this);">
                                                     <span class="ml-2 text-gray-700 text-lg">Mathematics</span>
                                                 </label>
                                                 <label class="inline-flex items-center">
-                                                    <input type="checkbox" name="subjects" value="Science" class="form-checkbox h-5 w-5 text-purple-600 rounded focus:ring-purple-500" onchange="handleSubjectChange()">
+                                                    <input type="checkbox" name="subjects" value="Science" class="form-checkbox h-5 w-5 text-purple-600 rounded focus:ring-purple-500" onchange="handleSubjectChange(); saveEnrollmentData(this);">
                                                     <span class="ml-2 text-gray-700 text-lg">Science</span>
                                                 </label>
                                                 <label class="inline-flex items-center">
-                                                    <input type="checkbox" name="subjects" value="Music" class="form-checkbox h-5 w-5 text-purple-600 rounded focus:ring-purple-500" onchange="handleSubjectChange()">
+                                                    <input type="checkbox" name="subjects" value="Music" class="form-checkbox h-5 w-5 text-purple-600 rounded focus:ring-purple-500" onchange="handleSubjectChange(); saveEnrollmentData(this);">
                                                     <span class="ml-2 text-gray-700 text-lg">Music</span>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="md:col-span-2">
                                             <label for="parent-name" class="block text-lg font-medium text-gray-700 mb-2">Parent/Guardian Name:</label>
-                                            <input type="text" id="parent-name" name="parentName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required>
+                                            <input type="text" id="parent-name" name="parentName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required oninput="saveEnrollmentData(this)">
                                         </div>
                                         <div class="md:col-span-2">
                                             <label for="home-address" class="block text-lg font-medium text-gray-700 mb-2">Home Address:</label>
-                                            <textarea id="home-address" name="homeAddress" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required></textarea>
+                                            <textarea id="home-address" name="homeAddress" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" required oninput="saveEnrollmentData(this)"></textarea>
                                         </div>
                                         <div class="md:col-span-2">
                                             <label for="contact-number" class="block text-lg font-medium text-gray-700 mb-2">Contact Number:</label>
-                                            <input type="tel" id="contact-number" name="contactNumber" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" pattern="[0-9]{10}" placeholder="e.g., 0712345678" required>
+                                            <input type="tel" id="contact-number" name="contactNumber" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" pattern="[0-9]{10}" placeholder="e.g., 0712345678" required oninput="saveEnrollmentData(this)">
                                             <p class="text-sm text-gray-500 mt-1">Format: 10 digits (e.g., 0712345678)</p>
                                         </div>
                                     </div>
@@ -478,11 +481,13 @@
                 if (pageName === 'enroll') {
                     document.getElementById('enrollment-form').addEventListener('submit', handleEnrollmentSubmit);
                     populateAgeAndGradeOptions(); // Populate dropdowns
-                    // Attach change listeners to subject checkboxes for dynamic validation
+                    // Attach change listeners to subject checkboxes for dynamic validation and saving
                     document.querySelectorAll('input[name="subjects"]').forEach(checkbox => {
                         checkbox.addEventListener('change', handleSubjectChange);
+                        checkbox.addEventListener('change', () => saveEnrollmentData(checkbox)); // Add saving for checkboxes
                     });
-                    handleSubjectChange(); // Initial call to set required status based on default
+                    loadEnrollmentData(); // Load saved data after elements are in DOM
+                    handleSubjectChange(); // Initial call to set required status based on loaded data
                 } else if (pageName === 'payment') {
                     document.getElementById('payment-form').addEventListener('submit', handlePaymentSubmit);
                     // Re-attach listener for WhatsApp receipt button as it's dynamically added
@@ -498,6 +503,48 @@
                 });
 
             }, 800); // Wait for exit animation to complete
+        }
+
+        // Function to save enrollment form data to localStorage
+        function saveEnrollmentData(element) {
+            let formData = JSON.parse(localStorage.getItem('enrollmentFormData') || '{}');
+            if (element.type === 'checkbox') {
+                if (!formData.subjects) {
+                    formData.subjects = [];
+                }
+                if (element.checked) {
+                    if (!formData.subjects.includes(element.value)) {
+                        formData.subjects.push(element.value);
+                    }
+                } else {
+                    formData.subjects = formData.subjects.filter(sub => sub !== element.value);
+                }
+            } else {
+                formData[element.name] = element.value;
+            }
+            localStorage.setItem('enrollmentFormData', JSON.stringify(formData));
+        }
+
+        // Function to load and pre-fill enrollment form data from localStorage
+        function loadEnrollmentData() {
+            const formData = JSON.parse(localStorage.getItem('enrollmentFormData') || '{}');
+            const form = document.getElementById('enrollment-form');
+            if (!form) return;
+
+            for (const key in formData) {
+                const element = form.elements[key];
+                if (element) {
+                    if (element.type === 'checkbox') {
+                        if (Array.isArray(formData[key])) {
+                            form.querySelectorAll(`input[name="${key}"]`).forEach(checkbox => {
+                                checkbox.checked = formData[key].includes(checkbox.value);
+                            });
+                        }
+                    } else {
+                        element.value = formData[key];
+                    }
+                }
+            }
         }
 
         // Function to populate age and grade dropdowns
@@ -611,6 +658,8 @@ ${data.homeAddress}
             // Open WhatsApp chat
             window.open(`https://wa.me/94710325294?text=${encodeURIComponent(message)}`, '_blank');
 
+            // Clear form data from localStorage after successful submission
+            localStorage.removeItem('enrollmentFormData');
             // Clear form
             form.reset();
             // Show a temporary success message
@@ -849,8 +898,13 @@ User's question: ${userMessage}` }] });
 
         // Initial page load and event listeners
         document.addEventListener('DOMContentLoaded', () => {
-            // Load the home page initially
-            loadPage('home');
+            // Check localStorage for the last visited page
+            const lastPage = localStorage.getItem('lastPage');
+            if (lastPage) {
+                loadPage(lastPage);
+            } else {
+                loadPage('home'); // Default to home if no last page is found
+            }
 
             // Attach event listeners to navigation links
             document.querySelectorAll('.nav-link').forEach(link => {
